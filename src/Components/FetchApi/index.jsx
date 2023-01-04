@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import { useContext } from "react";
 import { Cartcontext } from "../Context/context";
+import Carousel from "react-material-ui-carousel";
 
 const FetchApi = () => {
   const classes = useStyles();
@@ -25,20 +26,26 @@ const FetchApi = () => {
     <div className={classes.outer}>
       {user &&
         user?.map((items) => {
+          console.log(items, "img");
           return (
             <div className={classes.card}>
-              <img
-                src={items.images[0]}
-                alt={"images"}
-                className={classes.cardImg}
-              />
-
+              <Carousel className={classes.cardImg}>
+                {items?.images?.length &&
+                  items?.images?.map((e) => {
+                    console.log(e, "e");
+                    return (
+                      <img src={e} alt={"images"} className={classes.cardImg} />
+                    );
+                  })}
+              </Carousel>
               <h4 style={{ paddingLeft: "10px", fontFamily: "cursive" }}>
                 {" "}
                 {items.title}
               </h4>
               <div className={classes.des}>
-                <p className={classes.dess}>{items.description}</p>
+                <p className={classes.dess}>
+                  {items.description.substring(0, 50)}
+                </p>
               </div>
               <div className={classes.lower}>
                 <h5 style={{ margin: "10px" }}>Rs: {items.price} </h5>
@@ -84,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
   dess: {
     fontFamily: "cursive",
+    margin: 0,
   },
   des: {
     display: "flex",

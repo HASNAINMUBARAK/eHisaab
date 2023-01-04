@@ -1,12 +1,13 @@
 import React from "react";
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core";
+import Carousel from "react-material-ui-carousel";
+
 const SearchApi = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
   const [searchTitle, setSearchTilte] = useState("");
-
   const handleSearch = (e) => {
     fetch(`https://dummyjson.com/products/search?q=${e}`)
       .then((res) => res.json())
@@ -37,15 +38,27 @@ const SearchApi = () => {
           posts?.products?.map((items) => {
             return (
               <div className={classes.card}>
-                <img
-                  src={items.images[1]}
-                  alt="bro"
-                  style={{ width: "300px" }}
-                />
-                <h4 className={classes.des}>{items.description}</h4>
+                <Carousel className={classes.cardImg}>
+                  {items?.images?.length &&
+                    items?.images?.map((e) => {
+                      console.log(e, "e");
+                      return (
+                        <img
+                          src={e}
+                          alt={"images"}
+                          className={classes.cardImg}
+                        />
+                      );
+                    })}
+                </Carousel>
+                <p className={classes.des}>
+                  {items.description.substring(0, 50)}
+                </p>
                 <div className={classes.lower}>
-                  <h3 style={{ fontFamily: "cursive" }}>{items.title}</h3>
-                  <h3>RS: {items.price}</h3>
+                  <h4 style={{ fontFamily: "cursive" }}>
+                    {items.title.substring(0, 12)}
+                  </h4>
+                  <h4>RS: {items.price}</h4>
                 </div>
               </div>
             );
@@ -64,15 +77,22 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-around",
   },
   card: {
-    width: " 400px",
+    width: " 350px",
     boxShadow: "5px 5px 20px #5c5a5a",
     borderRadius: 5,
     margin: "20px",
+  },
+  cardImg: {
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    width: "100%",
+    height: 290,
   },
   des: {
     fontFamily: "cursive",
     marginLeft: 10,
     textAlign: "start",
+    margin: 0,
   },
   lower: {
     display: "flex",
